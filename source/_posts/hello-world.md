@@ -1,7 +1,5 @@
 ---
 title: Hello World
-tags: [test, whatever]
-categories: some
 
 
 ---
