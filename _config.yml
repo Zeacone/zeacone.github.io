@@ -3,10 +3,10 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Yiless
-subtitle: Live by the sun, love by the moon.
-description: 什么好玩儿玩儿什么。
-author: Zeacone
+title: Alexius's Utopia
+subtitle: Amusing ourselves to death.
+description: 爱瞎折腾。
+author: Alexius
 language: zh-Hans
 timezone:
 
@@ -63,7 +63,7 @@ pagination_dir: page
 # Extensions
 ## Plugins: https://hexo.io/plugins/
 ## Themes: https://hexo.io/themes/
-theme: next
+theme: cactus
 
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
