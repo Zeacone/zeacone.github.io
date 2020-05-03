@@ -17,7 +17,8 @@ install:
 script:
 # # - git submodule init      # 用于更新主题,更新源为自己的主题项目，否则会clone最新NexT主题，而官方主题配置文件没有设置
 # # - git submodule update
-- hexo clean && hexo g
+- hexo clean
+- hexo generate
 
 
 # after_success:
