@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="Path 命令的绘制分为两个部分，第一步是解析 path 的命令和参数，第二部是根据解析出的数据生成正确的贝塞尔曲线然后进行绘制。 Path 命令一共有 10 个子命令，并且区分大小写，大写代表绝对定位，小写代表相对定位，为了方便描述，在下文所有命令都以大写表示，只在代码中进行大小写——即相对定位和绝对定位的区分。  M：移动命令，即 move； L：线段命令，即 line； H：根据上一条 pa">
+<meta name="keywords" content="iOS,SVG">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS中绘制SVG（二）：path命令的绘制">
+<meta property="og:url" content="http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/index.html">
+<meta property="og:site_name" content="Alexius&#39;s Utopia">
+<meta property="og:description" content="Path 命令的绘制分为两个部分，第一步是解析 path 的命令和参数，第二部是根据解析出的数据生成正确的贝塞尔曲线然后进行绘制。 Path 命令一共有 10 个子命令，并且区分大小写，大写代表绝对定位，小写代表相对定位，为了方便描述，在下文所有命令都以大写表示，只在代码中进行大小写——即相对定位和绝对定位的区分。  M：移动命令，即 move； L：线段命令，即 line； H：根据上一条 pa">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="https://developer.mozilla.org/@api/deki/files/364/=Shortcut_Quadratic_Bezier.png">
+<meta property="og:image" content="https://developer.mozilla.org/@api/deki/files/363/=ShortCut_Cubic_Bezier.png">
+<meta property="og:updated_time" content="2019-06-15T16:39:59.142Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS中绘制SVG（二）：path命令的绘制">
+<meta name="twitter:description" content="Path 命令的绘制分为两个部分，第一步是解析 path 的命令和参数，第二部是根据解析出的数据生成正确的贝塞尔曲线然后进行绘制。 Path 命令一共有 10 个子命令，并且区分大小写，大写代表绝对定位，小写代表相对定位，为了方便描述，在下文所有命令都以大写表示，只在代码中进行大小写——即相对定位和绝对定位的区分。  M：移动命令，即 move； L：线段命令，即 line； H：根据上一条 pa">
+<meta name="twitter:image" content="https://developer.mozilla.org/@api/deki/files/364/=Shortcut_Quadratic_Bezier.png">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>iOS中绘制SVG（二）：path命令的绘制</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+         
+          <li><a href="/projects/">Projects</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" href="/2017/09/16/iOS二维码的识别/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" href="/2017/08/24/iOS中绘制SVG（一）：SVG文件的解析/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&text=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&title=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&is_video=false&description=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=iOS中绘制SVG（二）：path命令的绘制&body=Check out this article: http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&title=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&title=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&title=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&title=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&name=iOS中绘制SVG（二）：path命令的绘制&description=&lt;p&gt;Path 命令的绘制分为两个部分，第一步是解析 path 的命令和参数，第二部是根据解析出的数据生成正确的贝塞尔曲线然后进行绘制。&lt;/p&gt;
+&lt;p&gt;Path 命令一共有 10 个子命令，并且区分大小写，大写代表绝对定位，小写代表相对定位，为了方便描述，在下文所有命令都以大写表示，只在代码中进行大小写——即相对定位和绝对定位的区分。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;M：移动命令，即 move；&lt;/li&gt;
+&lt;li&gt;L：线段命令，即 line；&lt;/li&gt;
+&lt;li&gt;H：根据上一条 path 的终点添加一条水平方向的线段；&lt;/li&gt;
+&lt;li&gt;V：根据上一条 path 的终点添加一条垂直方向的线段；&lt;/li&gt;
+&lt;li&gt;A：添加一段弧线；&lt;/li&gt;
+&lt;li&gt;C：添加一段 curve，即二次贝塞尔曲线；&lt;/li&gt;
+&lt;li&gt;Q：添加一段 quad curve，即三次贝塞尔曲线；&lt;/li&gt;
+&lt;li&gt;S：在 C 命令后追加一段镜像 curve；&lt;/li&gt;
+&lt;li&gt;T：在 Q 命令后追加一段镜像 quad curve；&lt;/li&gt;
+&lt;li&gt;Z：close 当前的path。&lt;/li&gt;
+&lt;/ul&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&t=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#解析数据"><span class="toc-number">1.</span> <span class="toc-text">解析数据</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#扫描命令和参数"><span class="toc-number">1.1.</span> <span class="toc-text">扫描命令和参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#执行对应的命令"><span class="toc-number">1.2.</span> <span class="toc-text">执行对应的命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#绘制path"><span class="toc-number">2.</span> <span class="toc-text">绘制path</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#M命令"><span class="toc-number">2.1.</span> <span class="toc-text">M命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#L命令"><span class="toc-number">2.2.</span> <span class="toc-text">L命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#H命令"><span class="toc-number">2.3.</span> <span class="toc-text">H命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#V命令"><span class="toc-number">2.4.</span> <span class="toc-text">V命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Q命令"><span class="toc-number">2.5.</span> <span class="toc-text">Q命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#T命令"><span class="toc-number">2.6.</span> <span class="toc-text">T命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#C命令"><span class="toc-number">2.7.</span> <span class="toc-text">C命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#S命令"><span class="toc-number">2.8.</span> <span class="toc-text">S命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#A命令"><span class="toc-number">2.9.</span> <span class="toc-text">A命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Z命令"><span class="toc-number">2.10.</span> <span class="toc-text">Z命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查漏"><span class="toc-number">2.11.</span> <span class="toc-text">查漏</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-number">3.</span> <span class="toc-text">小结</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        iOS中绘制SVG（二）：path命令的绘制
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Alexius's Utopia</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2017-08-26T04:59:28.000Z" itemprop="datePublished">2017-08-26</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/iOS/">iOS</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/SVG/">SVG</a>, <a class="tag-link" href="/tags/iOS/">iOS</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <p>Path 命令的绘制分为两个部分，第一步是解析 path 的命令和参数，第二部是根据解析出的数据生成正确的贝塞尔曲线然后进行绘制。</p>
+<p>Path 命令一共有 10 个子命令，并且区分大小写，大写代表绝对定位，小写代表相对定位，为了方便描述，在下文所有命令都以大写表示，只在代码中进行大小写——即相对定位和绝对定位的区分。</p>
+<ul>
+<li>M：移动命令，即 move；</li>
+<li>L：线段命令，即 line；</li>
+<li>H：根据上一条 path 的终点添加一条水平方向的线段；</li>
+<li>V：根据上一条 path 的终点添加一条垂直方向的线段；</li>
+<li>A：添加一段弧线；</li>
+<li>C：添加一段 curve，即二次贝塞尔曲线；</li>
+<li>Q：添加一段 quad curve，即三次贝塞尔曲线；</li>
+<li>S：在 C 命令后追加一段镜像 curve；</li>
+<li>T：在 Q 命令后追加一段镜像 quad curve；</li>
+<li>Z：close 当前的path。</li>
+</ul>
+<a id="more"></a>
+<p>接下来就开始 path 命令具体的解析和绘制过程。</p>
+<h3 id="解析数据"><a href="#解析数据" class="headerlink" title="解析数据"></a>解析数据</h3><h4 id="扫描命令和参数"><a href="#扫描命令和参数" class="headerlink" title="扫描命令和参数"></a>扫描命令和参数</h4><p>首先，path 命令以一个字符串的形式表示，因为在 path 中都是以 command 加上参数的形式，所以在此需要使用到<code>NSScanner</code>这个类来进行扫描相应的命令和参数。</p>
+<p>先将所有的命令分大小写拼接成一个字符串——“MLHVACQSTZmlhvacqstz”，然后利用<code>scanCharactersFromSet:</code>方法扫描子命令，如果扫描到命令的话继续利用<code>scanDouble:</code>扫描命令后面所跟的参数，参数扫描结束后开始生成本次命令的贝塞尔曲线。<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">NSScanner</span> *scanner = [<span class="built_in">NSScanner</span> scannerWithString:commandStr];</span><br><span class="line"><span class="built_in">NSCharacterSet</span> *skipSet = [<span class="built_in">NSCharacterSet</span> characterSetWithCharactersInString:<span class="string">@" ,\n"</span>];</span><br><span class="line">scanner.charactersToBeSkipped = skipSet;</span><br><span class="line"></span><br><span class="line"><span class="built_in">NSCharacterSet</span> *commandSet = [<span class="built_in">NSCharacterSet</span> characterSetWithCharactersInString:<span class="string">@"MLACQSTHVZmlacqsthvz"</span>];</span><br><span class="line"><span class="built_in">NSString</span> *command = <span class="literal">nil</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> ([scanner scanCharactersFromSet:commandSet intoString:&amp;command]) &#123;</span><br><span class="line">    <span class="built_in">NSMutableArray</span>&lt;<span class="built_in">NSNumber</span> *&gt; *numbers = [<span class="built_in">NSMutableArray</span> array];</span><br><span class="line">    <span class="keyword">double</span> number = <span class="number">0</span>;</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">while</span> ([scanner scanDouble:&amp;number]) &#123;</span><br><span class="line">        [numbers addObject:@(number)];</span><br><span class="line">    &#125;</span><br><span class="line">    [<span class="keyword">self</span> executeCommand:[command UTF8String] Numbers:[numbers <span class="keyword">copy</span>]];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="执行对应的命令"><a href="#执行对应的命令" class="headerlink" title="执行对应的命令"></a>执行对应的命令</h4><p>然后在<code>executeCommand:(const char *)command Numbers:(NSArray&lt;NSNumber *&gt; *)nums</code>方法中根据具体命令的大小写来执行对应的方法。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)executeCommand:(<span class="keyword">const</span> <span class="keyword">char</span> *)command Numbers:(<span class="built_in">NSArray</span>&lt;<span class="built_in">NSNumber</span> *&gt; *)nums &#123;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">switch</span> (command[<span class="number">0</span>]) &#123;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'M'</span>:</span><br><span class="line">          [<span class="keyword">self</span> move:nums Relative:<span class="literal">NO</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'m'</span>:</span><br><span class="line">          [<span class="keyword">self</span> move:nums Relative:<span class="literal">YES</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'L'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addLine:nums Relative:<span class="literal">NO</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'l'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addLine:nums Relative:<span class="literal">YES</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'A'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addArc:nums Relative:<span class="literal">NO</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'a'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addArc:nums Relative:<span class="literal">YES</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'C'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addCurve:nums Relative:<span class="literal">NO</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'c'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addCurve:nums Relative:<span class="literal">YES</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'Q'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addQuad:nums Relative:<span class="literal">NO</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'q'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addQuad:nums Relative:<span class="literal">YES</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'S'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addSmoothCurve:nums Relative:<span class="literal">NO</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'s'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addSmoothCurve:nums Relative:<span class="literal">YES</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'T'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addSmoothQuad:nums Relative:<span class="literal">NO</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'t'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addSmoothQuad:nums Relative:<span class="literal">YES</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'H'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addHorizon:nums Relative:<span class="literal">NO</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'h'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addHorizon:nums Relative:<span class="literal">YES</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'V'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addVertical:nums Relative:<span class="literal">NO</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'v'</span>:</span><br><span class="line">          [<span class="keyword">self</span> addVertical:nums Relative:<span class="literal">YES</span>];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'Z'</span>:</span><br><span class="line">      <span class="keyword">case</span> <span class="string">'z'</span>:</span><br><span class="line">          [<span class="keyword">self</span> close];</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line"></span><br><span class="line">      <span class="keyword">default</span>:</span><br><span class="line">          <span class="built_in">NSLog</span>(<span class="string">@"cannot resolve command."</span>);</span><br><span class="line">          <span class="keyword">break</span>;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>到此为止，path 的解析就已经完成了。</p>
+<h3 id="绘制path"><a href="#绘制path" class="headerlink" title="绘制path"></a>绘制path</h3><p>由于需要保存绘制过程中的一些变量，因此会声明几个全局变量在绘制过程中进行保存数据。</p>
+<ul>
+<li>由于存在相对位置，所以需要<code>CGPoint</code>类型的<code>lastPoint</code>来保存前一path的终点；</li>
+<li>由于T命令需要根据上一条路径推断控制点，所以需要<code>CGPoint</code>类型的<code>preQCtrl</code>来记录上一条二次贝塞尔曲线的控制点；</li>
+<li>由于 S 命令同T命令一样，所以需要<code>CGPoint</code>类型的<code>preCCtrl</code>来记录上一条三次贝塞尔曲线的第一个控制点；</li>
+</ul>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">CGPoint</span> lastPoint;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">CGPoint</span> preQCtrl;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">CGPoint</span> preCCtrl;</span><br></pre></td></tr></table></figure>
+<h4 id="M命令"><a href="#M命令" class="headerlink" title="M命令"></a>M命令</h4><p>M 命令后面会跟着一个坐标，意思是将画笔移动到所给坐标的位置，path 将以这个坐标为起点。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// M命令格式如下："M10 10"</span></span><br><span class="line"><span class="built_in">CGPoint</span> p = <span class="built_in">CGPointMake</span>(<span class="number">10</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果是相对定位，需要加上上一 path 的终点</span></span><br><span class="line"><span class="keyword">if</span> (relative) &#123;</span><br><span class="line">    p = <span class="built_in">CGPointMake</span>(lastPoint.x + p.x, lastPoint.y + p.y);</span><br><span class="line">&#125;</span><br><span class="line">[<span class="keyword">self</span>.path moveToPoint:p];</span><br><span class="line"></span><br><span class="line"><span class="comment">// 在绘制完成后，需要将记录 path 终点的 lastPoint 指向新的终点，后面除了 Z 以外的所有命令都相同，不再赘述。</span></span><br><span class="line">lastPoint = p;</span><br></pre></td></tr></table></figure>
+<h4 id="L命令"><a href="#L命令" class="headerlink" title="L命令"></a>L命令</h4><p>L 命令将会在上一 path 的终点和给定的点之间画一条直线。L 命令添加一条直线，其后同样是跟着一个点的坐标，这个坐标点是直线的终点。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// L命令格式如下："L 10 10"</span></span><br><span class="line"><span class="built_in">CGPoint</span> p = <span class="built_in">CGPointMake</span>(<span class="number">10</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (relative) &#123;</span><br><span class="line">    p = <span class="built_in">CGPointMake</span>(lastPoint.x + p.x, lastPoint.y + p.y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="keyword">self</span>.path addLineToPoint:p];</span><br><span class="line"></span><br><span class="line">lastPoint = p;</span><br></pre></td></tr></table></figure>
+<h4 id="H命令"><a href="#H命令" class="headerlink" title="H命令"></a>H命令</h4><p>H 代表着 horizon，意思是画一条水平方向的直线。H 命令后面会跟一个数字，数字代表 x 坐标，y 坐标与前一坐标的 y 坐标相同。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// H命令格式如下："H 90"</span></span><br><span class="line"><span class="built_in">CGPoint</span> p = <span class="built_in">CGPointMake</span>(<span class="number">90</span>, lastPoint.y);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (relative) &#123;</span><br><span class="line">    p = <span class="built_in">CGPointMake</span>(lastPoint.x + p.x, lastPoint.y);</span><br><span class="line">&#125;</span><br><span class="line">[<span class="keyword">self</span>.path addLineToPoint:p];</span><br><span class="line"></span><br><span class="line">lastPoint = p;</span><br></pre></td></tr></table></figure>
+<h4 id="V命令"><a href="#V命令" class="headerlink" title="V命令"></a>V命令</h4><p>V 代表 vertical，意思是画一条垂直方向的直线。V 命令格式同 H 命令一样。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// V命令格式如下："V 90"</span></span><br><span class="line"><span class="built_in">CGPoint</span> p = <span class="built_in">CGPointMake</span>(lastPoint.x, <span class="number">90</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (relative) &#123;</span><br><span class="line">    p = <span class="built_in">CGPointMake</span>(lastPoint.x, lastPoint.y + p.y);</span><br><span class="line">&#125;</span><br><span class="line">[<span class="keyword">self</span>.path addLineToPoint:p];</span><br><span class="line"></span><br><span class="line">lastPoint = p;</span><br></pre></td></tr></table></figure>
+<h4 id="Q命令"><a href="#Q命令" class="headerlink" title="Q命令"></a>Q命令</h4><p>Q 命令用来创建二次贝塞尔曲线，关于贝塞尔曲线，可以去<a href="https://zh.wikipedia.org/wiki/%E8%B2%9D%E8%8C%B2%E6%9B%B2%E7%B7%9A#.E4.BA.8C.E6.AC.A1.E6.96.B9.E8.B2.9D.E8.8C.B2.E6.9B.B2.E7.B7.9A" target="_blank" rel="noopener">维基</a>上查看其具体的定义。二次贝塞尔曲线需要两个点来确定，分别是终点和控制点。iOS 中的<code>UIbezierPath</code>类提供了<code>addQuadCurveToPoint: controlPoint:</code>方法来绘制一条二次贝塞尔曲线。</p>
+<p>由于相对定位是相对于前一 path 的终点来说，而二次贝塞尔曲线因为有两个点需要在本次绘制的时候确定，因此，绘制的时候需要同时计算控制点和终点的坐标。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Q命令格式如下："Q 95 10 180 80"，其中(95, 10)是控制点坐标，(180, 80)是终点坐标</span></span><br><span class="line"><span class="built_in">CGPoint</span> c = <span class="built_in">CGPointMake</span>(<span class="number">95</span>, <span class="number">10</span>); <span class="comment">// 控制点</span></span><br><span class="line"><span class="built_in">CGPoint</span> p = <span class="built_in">CGPointMake</span>(<span class="number">180</span>, <span class="number">80</span>); <span class="comment">// 终点</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (relative) &#123;</span><br><span class="line">    c = <span class="built_in">CGPointMake</span>(lastPoint.x + c.x, lastPoint.y + c.y);</span><br><span class="line">    p = <span class="built_in">CGPointMake</span>(lastPoint.x + p.x, lastPoint.y + p.y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="keyword">self</span>.path addQuadCurveToPoint:p controlPoint:c];</span><br><span class="line"></span><br><span class="line">lastPoint = p;</span><br><span class="line"><span class="comment">// 因为下文中的 T 命令，所以需要保存二次贝塞尔曲线的控制点</span></span><br><span class="line">preQCtrl = c;</span><br></pre></td></tr></table></figure>
+<h4 id="T命令"><a href="#T命令" class="headerlink" title="T命令"></a>T命令</h4><p>T 命令实际上也是绘制一条二次贝塞尔曲线，与 Q 命令不同的是，T 命令不需要指定控制点坐标，只需要一个终点坐标。控制点坐标是前一段 path 的控制点相对于终点的对称点。如下图，蓝色直线与红色直线的交点为前一 path 的终点 p，红色直线向上延长的终点为前一 path 的控制点 c1 ，蓝色直线向下延长的终点为当前绘制曲线的控制点 c2 ，c1 和 c2 相对于 p 对称。因此 c2 的坐标计算公式为 <code>c2.x = p.x + (p.x - c1.x)，c2.y = p.y + (p.y - c1.y)</code>。<br><img src="https://developer.mozilla.org/@api/deki/files/364/=Shortcut_Quadratic_Bezier.png" alt><br><strong><em>需要注意的是，T 命令前面必须也是一条二次贝塞尔曲线，即前一个命令必须是 Q 命令或者 T 命令。如果 T 命令单独出现的话，将会画出一条直线。</em></strong></p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// T命令格式如下："T95 10"，(95, 10)是二次贝塞尔曲线的终点</span></span><br><span class="line"><span class="built_in">CGPoint</span> p = <span class="built_in">CGPointMake</span>(<span class="number">95</span>, <span class="number">10</span>);</span><br><span class="line"><span class="built_in">CGPoint</span> c;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (relative) &#123;</span><br><span class="line">    p = <span class="built_in">CGPointMake</span>(lastPoint.x + p.x, lastPoint.y + p.y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果 T 命令前不是二次贝塞尔曲线，将会画出一条直线，也就是说控制点在终点和起点的连线上</span></span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">CGPointEqualToPoint</span>(preQCtrl, <span class="built_in">CGPointZero</span>)) &#123;</span><br><span class="line">    c = p;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    c = <span class="built_in">CGPointMake</span>(lastPoint.x + (lastPoint.x - preQCtrl.x), lastPoint.y + (lastPoint.y - preQCtrl.y));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="keyword">self</span>.path addQuadCurveToPoint:p controlPoint:c];</span><br><span class="line"></span><br><span class="line">lastPoint = p;</span><br><span class="line">preQCtrl = c;</span><br></pre></td></tr></table></figure>
+<h4 id="C命令"><a href="#C命令" class="headerlink" title="C命令"></a>C命令</h4><p>C 命令用来创建三次贝塞尔曲线。三次贝塞尔曲线需要三个点来确定，分别是终点和两个控制点。iOS 中的<code>UIbezierPath</code>类同样提供了<code>addCurveToPoint: controlPoint1: controlPoint2:</code>方法来绘制一条三次贝塞尔曲线。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// C命令格式如下："C 20 20, 40 20, 50 10"</span></span><br><span class="line"><span class="comment">// 控制点1：(20, 20)，控制点2：(40, 20)，终点：(50, 10)</span></span><br><span class="line"><span class="built_in">CGPoint</span> c1 = <span class="built_in">CGPointMake</span>(<span class="number">20</span>, <span class="number">20</span>);</span><br><span class="line"><span class="built_in">CGPoint</span> c2 = <span class="built_in">CGPointMake</span>(<span class="number">40</span>, <span class="number">20</span>);</span><br><span class="line"><span class="built_in">CGPoint</span> p  = <span class="built_in">CGPointMake</span>(<span class="number">50</span>, <span class="number">10</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 同Q命令一样，相对定位情况下需要计算所有控制点和终点的坐标</span></span><br><span class="line"><span class="keyword">if</span> (relative) &#123;</span><br><span class="line">  c1 = <span class="built_in">CGPointMake</span>(lastPoint.x + c1.x, lastPoint.y + c1.y);</span><br><span class="line">  c2 = <span class="built_in">CGPointMake</span>(lastPoint.x + c2.x, lastPoint.y + c2.y);</span><br><span class="line">  p = <span class="built_in">CGPointMake</span>(lastPoint.x + p.x, lastPoint.y + p.y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="keyword">self</span>.path addCurveToPoint:p controlPoint1:c1 controlPoint2:c2];</span><br><span class="line">lastPoint = p;</span><br><span class="line"><span class="comment">// 因为下文中的 S 命令，所以需要保存三次贝塞尔曲线的第二个控制点</span></span><br><span class="line">preCCtrl = c2;</span><br></pre></td></tr></table></figure>
+<h4 id="S命令"><a href="#S命令" class="headerlink" title="S命令"></a>S命令</h4><p>S 命令可以用来创建与之前 C 或者 S 命令一样的三次贝塞尔曲线。S 命令的第一个控制点是前一条三次贝塞尔曲线的第二个控制点相对于终点的对称点。如下图，蓝色和红色线段的交点为上一线段的终点 p，红色线段向上延长的终点为第一条线段的第二个控制点 c12，蓝色线段向下延长的终点为第二条线段的第一个控制点 c21，c12 和 c21 相对于 p 对称。因此 c21 的坐标计算公式为：<code>c21.x = p.x + (p.x - c12.x), c21.y = p.y + (p.y - c12.y)</code>。</p>
+<p><img src="https://developer.mozilla.org/@api/deki/files/363/=ShortCut_Cubic_Bezier.png" alt><br><strong><em>如果 S 命令单独使用，那么它的两个控制点将会使用同一个坐标。</em></strong></p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// S命令的格式如下："S 150 150, 180 80"</span></span><br><span class="line"><span class="comment">// 第二个控制点：(150, 150)，终点：(180, 80)</span></span><br><span class="line"><span class="built_in">CGPoint</span> c1;</span><br><span class="line"><span class="built_in">CGPoint</span> c2 = <span class="built_in">CGPointMake</span>(<span class="number">150</span>, <span class="number">150</span>);</span><br><span class="line"><span class="built_in">CGPoint</span> p = <span class="built_in">CGPointMake</span>(<span class="number">180</span>, <span class="number">80</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (relative) &#123;</span><br><span class="line">  c2 = <span class="built_in">CGPointMake</span>(lastPoint.x + c2.x, lastPoint.y + c2.y);</span><br><span class="line">  p = <span class="built_in">CGPointMake</span>(lastPoint.x + p.x, lastPoint.y + p.y);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果前一个命令不是C命令或者S命令，则第一个控制点与第二个控制点坐标相同</span></span><br><span class="line"><span class="keyword">if</span> (<span class="built_in">CGPointEqualToPoint</span>(preCCtrl, <span class="built_in">CGPointZero</span>)) &#123;</span><br><span class="line">  c1 = c2;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">  c1 = <span class="built_in">CGPointMake</span>(lastPoint.x + (lastPoint.x - preCCtrl.x), lastPoint.y + (lastPoint.y - preCCtrl.y));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">[<span class="keyword">self</span>.path addCurveToPoint:p controlPoint1:c1 controlPoint2:c2];</span><br><span class="line"></span><br><span class="line">lastPoint = p;</span><br><span class="line">preCCtrl = c2;</span><br></pre></td></tr></table></figure>
+<h4 id="A命令"><a href="#A命令" class="headerlink" title="A命令"></a>A命令</h4><p>暂略。</p>
+<h4 id="Z命令"><a href="#Z命令" class="headerlink" title="Z命令"></a>Z命令</h4><p>Z命令代表封闭 path。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[<span class="keyword">self</span>.path close];</span><br></pre></td></tr></table></figure>
+<h4 id="查漏"><a href="#查漏" class="headerlink" title="查漏"></a>查漏</h4><p>因为二次贝塞尔曲线和三次贝塞尔曲线都需要记录一个控制点，并且二次和三次贝塞尔曲线的记录不一样，所以在执行其它命令的时候，需要将记录清空（设置成CGPointZero）以免 T 和 S 命令误以为前一 path 是二次或者三次贝塞尔曲线。<br>因此在执行命令的<code>executeCommand:(const char *)command Numbers:(NSArray&lt;NSNumber *&gt; *)nums</code>方法开头部分添加如下代码：<br><figure class="highlight objc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 如果命令不是 Q 和 T，需要将记录二次贝塞尔曲线控制点的属性 preQCtrl 设为 CGPointZero</span></span><br><span class="line"><span class="comment">// 因此在非 Q 和 T 命令的情况下，便于单独的 T 命令进行判断</span></span><br><span class="line"><span class="built_in">NSString</span> *q_excluded = <span class="string">@"MmLlAaCcSsHhVvZz"</span>;</span><br><span class="line"><span class="keyword">if</span> ([q_excluded containsString:[<span class="built_in">NSString</span> stringWithUTF8String:command]]) &#123;</span><br><span class="line">    preQCtrl = <span class="built_in">CGPointZero</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 如果命令不是 C 和 S，需要将记录三次贝塞尔曲线第二个控制点的属性 preCCtrl 设为 CGPointZero</span></span><br><span class="line"><span class="comment">// 因此在非 C 和 S 命令的情况下，便于单独的 S 命令进行判断</span></span><br><span class="line"><span class="built_in">NSString</span> *c_excluded = <span class="string">@"MmLlAaQqTtHhVvZz"</span>;</span><br><span class="line"><span class="keyword">if</span> ([c_excluded containsString:[<span class="built_in">NSString</span> stringWithUTF8String:command]]) &#123;</span><br><span class="line">    preCCtrl = <span class="built_in">CGPointZero</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>本文只是简单介绍了 SVG 中 path 的基础绘制，其中主要的内容在于：</p>
+<ol>
+<li><p>将命令和参数正确的解析出来；</p>
+</li>
+<li><p>弄清楚相对坐标和绝对坐标情况下的 path 的点所应处的位置；</p>
+</li>
+<li><p>另外就是弄清楚T和S命令的控制点是怎么确定的。</p>
+</li>
+</ol>
+<p>其它方面的东西都是很容易的。</p>
+<p>详细代码请关注GitHub：<a href="https://github.com/Zeacone/SVGlib" target="_blank" rel="noopener">Zeacone</a></p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+         
+          <li><a href="/projects/">Projects</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#解析数据"><span class="toc-number">1.</span> <span class="toc-text">解析数据</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#扫描命令和参数"><span class="toc-number">1.1.</span> <span class="toc-text">扫描命令和参数</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#执行对应的命令"><span class="toc-number">1.2.</span> <span class="toc-text">执行对应的命令</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#绘制path"><span class="toc-number">2.</span> <span class="toc-text">绘制path</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#M命令"><span class="toc-number">2.1.</span> <span class="toc-text">M命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#L命令"><span class="toc-number">2.2.</span> <span class="toc-text">L命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#H命令"><span class="toc-number">2.3.</span> <span class="toc-text">H命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#V命令"><span class="toc-number">2.4.</span> <span class="toc-text">V命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Q命令"><span class="toc-number">2.5.</span> <span class="toc-text">Q命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#T命令"><span class="toc-number">2.6.</span> <span class="toc-text">T命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#C命令"><span class="toc-number">2.7.</span> <span class="toc-text">C命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#S命令"><span class="toc-number">2.8.</span> <span class="toc-text">S命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#A命令"><span class="toc-number">2.9.</span> <span class="toc-text">A命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#Z命令"><span class="toc-number">2.10.</span> <span class="toc-text">Z命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#查漏"><span class="toc-number">2.11.</span> <span class="toc-text">查漏</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#小结"><span class="toc-number">3.</span> <span class="toc-text">小结</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&text=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&title=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&is_video=false&description=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=iOS中绘制SVG（二）：path命令的绘制&body=Check out this article: http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&title=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&title=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&title=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&title=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&name=iOS中绘制SVG（二）：path命令的绘制&description=&lt;p&gt;Path 命令的绘制分为两个部分，第一步是解析 path 的命令和参数，第二部是根据解析出的数据生成正确的贝塞尔曲线然后进行绘制。&lt;/p&gt;
+&lt;p&gt;Path 命令一共有 10 个子命令，并且区分大小写，大写代表绝对定位，小写代表相对定位，为了方便描述，在下文所有命令都以大写表示，只在代码中进行大小写——即相对定位和绝对定位的区分。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;M：移动命令，即 move；&lt;/li&gt;
+&lt;li&gt;L：线段命令，即 line；&lt;/li&gt;
+&lt;li&gt;H：根据上一条 path 的终点添加一条水平方向的线段；&lt;/li&gt;
+&lt;li&gt;V：根据上一条 path 的终点添加一条垂直方向的线段；&lt;/li&gt;
+&lt;li&gt;A：添加一段弧线；&lt;/li&gt;
+&lt;li&gt;C：添加一段 curve，即二次贝塞尔曲线；&lt;/li&gt;
+&lt;li&gt;Q：添加一段 quad curve，即三次贝塞尔曲线；&lt;/li&gt;
+&lt;li&gt;S：在 C 命令后追加一段镜像 curve；&lt;/li&gt;
+&lt;li&gt;T：在 Q 命令后追加一段镜像 quad curve；&lt;/li&gt;
+&lt;li&gt;Z：close 当前的path。&lt;/li&gt;
+&lt;/ul&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/&t=iOS中绘制SVG（二）：path命令的绘制"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2014-2020
+    Alexius
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+         
+          <li><a href="/projects/">Projects</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>

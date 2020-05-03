@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang=zh>
+<head><meta name="generator" content="Hexo 3.8.0">
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="概览 二维条码是指在一维条码的基础上扩展出另一维具有可读性的条码，使用黑白矩形图案表示二进制数据，被设备扫描后可获取其中所包含的信息。一维条码的宽度记载着数据，而其长度没有记载数据。二维条码的长度、宽度均记载着数据。 二维条码在商业活动中应用广泛，特别是在高科技行业、储存运输业、批发零售业等需要对物品进行廉价快捷的标示信息的行业用途广泛。  闲话少叙，二维码的应用已经到了无孔不入的地步，只要是个规">
+<meta name="keywords" content="iOS,二维码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS中二维码的识别">
+<meta property="og:url" content="http://yoursite.com/2017/09/16/iOS二维码的识别/index.html">
+<meta property="og:site_name" content="Alexius&#39;s Utopia">
+<meta property="og:description" content="概览 二维条码是指在一维条码的基础上扩展出另一维具有可读性的条码，使用黑白矩形图案表示二进制数据，被设备扫描后可获取其中所包含的信息。一维条码的宽度记载着数据，而其长度没有记载数据。二维条码的长度、宽度均记载着数据。 二维条码在商业活动中应用广泛，特别是在高科技行业、储存运输业、批发零售业等需要对物品进行廉价快捷的标示信息的行业用途广泛。  闲话少叙，二维码的应用已经到了无孔不入的地步，只要是个规">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-06-15T16:39:59.142Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS中二维码的识别">
+<meta name="twitter:description" content="概览 二维条码是指在一维条码的基础上扩展出另一维具有可读性的条码，使用黑白矩形图案表示二进制数据，被设备扫描后可获取其中所包含的信息。一维条码的宽度记载着数据，而其长度没有记载数据。二维条码的长度、宽度均记载着数据。 二维条码在商业活动中应用广泛，特别是在高科技行业、储存运输业、批发零售业等需要对物品进行廉价快捷的标示信息的行业用途广泛。  闲话少叙，二维码的应用已经到了无孔不入的地步，只要是个规">
+    
+    
+        
+          
+              <link rel="shortcut icon" href="/images/favicon.ico">
+          
+        
+        
+          
+            <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+          
+        
+        
+          
+            <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+          
+        
+    
+    <!-- title -->
+    <title>iOS中二维码的识别</title>
+    <!-- styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- persian styles -->
+    
+      <link rel="stylesheet" href="/css/rtl.css">
+    
+    <!-- rss -->
+    
+    
+</head>
+
+<body class="max-width mx-auto px3 ltr">    
+      <div id="header-post">
+  <a id="menu-icon" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#"><i class="fas fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fas fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+         
+          <li><a href="/projects/">Projects</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </span>
+    <br>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" href="/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2017/09/16/iOS二维码的识别/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&text=iOS中二维码的识别"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&title=iOS中二维码的识别"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&is_video=false&description=iOS中二维码的识别"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=iOS中二维码的识别&body=Check out this article: http://yoursite.com/2017/09/16/iOS二维码的识别/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&title=iOS中二维码的识别"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&title=iOS中二维码的识别"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&title=iOS中二维码的识别"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&title=iOS中二维码的识别"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&name=iOS中二维码的识别&description=&lt;h3 id=&quot;概览&quot;&gt;&lt;a href=&quot;#概览&quot; class=&quot;headerlink&quot; title=&quot;概览&quot;&gt;&lt;/a&gt;概览&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;二维条码&lt;/strong&gt;是指在一维条码的基础上扩展出另一维具有可读性的条码，使用黑白矩形图案表示二进制数据，被设备扫描后可获取其中所包含的信息。一维条码的宽度记载着数据，而其长度没有记载数据。二维条码的长度、宽度均记载着数据。&lt;/p&gt;
+&lt;p&gt;二维条码在商业活动中应用广泛，特别是在高科技行业、储存运输业、批发零售业等需要对物品进行廉价快捷的标示信息的行业用途广泛。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;闲话少叙，二维码的应用已经到了无孔不入的地步，只要是个规模稍大点儿的APP就基本支持二维码的识别，所以，本文就讲讲二维码的识别。&lt;/p&gt;"><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2017/09/16/iOS二维码的识别/&t=iOS中二维码的识别"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    <div id="toc">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概览"><span class="toc-number">1.</span> <span class="toc-text">概览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UI绘制"><span class="toc-number">2.</span> <span class="toc-text">UI绘制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#摄像头扫描二维码"><span class="toc-number">3.</span> <span class="toc-text">摄像头扫描二维码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#检查相机授权"><span class="toc-number">3.1.</span> <span class="toc-text">检查相机授权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相机设置"><span class="toc-number">3.2.</span> <span class="toc-text">相机设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#输出代理"><span class="toc-number">3.3.</span> <span class="toc-text">输出代理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#图片识别二维码"><span class="toc-number">4.</span> <span class="toc-text">图片识别二维码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用闪光灯"><span class="toc-number">5.</span> <span class="toc-text">使用闪光灯</span></a></li></ol>
+    </div>
+  </span>
+</div>
+
+    
+    <div class="content index py4">
+        
+        <article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle" itemprop="name headline">
+        iOS中二维码的识别
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span itemprop="name">Alexius's Utopia</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2017-09-16T02:10:21.000Z" itemprop="datePublished">2017-09-16</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fas fa-archive"></i>
+        <a class="category-link" href="/categories/iOS/">iOS</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fas fa-tag"></i>
+        <a class="tag-link" href="/tags/iOS/">iOS</a>, <a class="tag-link" href="/tags/二维码/">二维码</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content" itemprop="articleBody">
+    <h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><blockquote>
+<p><strong>二维条码</strong>是指在一维条码的基础上扩展出另一维具有可读性的条码，使用黑白矩形图案表示二进制数据，被设备扫描后可获取其中所包含的信息。一维条码的宽度记载着数据，而其长度没有记载数据。二维条码的长度、宽度均记载着数据。</p>
+<p>二维条码在商业活动中应用广泛，特别是在高科技行业、储存运输业、批发零售业等需要对物品进行廉价快捷的标示信息的行业用途广泛。</p>
+</blockquote>
+<p>闲话少叙，二维码的应用已经到了无孔不入的地步，只要是个规模稍大点儿的APP就基本支持二维码的识别，所以，本文就讲讲二维码的识别。</p>
+<a id="more"></a>
+<h3 id="UI绘制"><a href="#UI绘制" class="headerlink" title="UI绘制"></a>UI绘制</h3><p>常规的二维码扫描界面是一个灰色的背景和一个正方形的白框来确定二维码的位置。在此我们使用贝塞尔曲线来画出形状，用<code>CAShapeLayer</code>来进行展示。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> path1 = <span class="type">UIBezierPath</span>(rect: <span class="keyword">self</span>.view.bounds)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 第二条path用来绘制正方形</span></span><br><span class="line"><span class="keyword">let</span> x = (<span class="keyword">self</span>.view.bounds.size.width - <span class="number">200</span>) / <span class="number">2</span></span><br><span class="line"><span class="keyword">let</span> path2 = <span class="type">UIBezierPath</span>(rect: <span class="type">CGRect</span>(x: x, y: <span class="number">150</span>, width: <span class="number">200</span>, height: <span class="number">200</span>))</span><br><span class="line"></span><br><span class="line">path1.append(path2)</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> shape = <span class="type">CAShapeLayer</span>()</span><br><span class="line">shape.path = path1.cgPath</span><br><span class="line"><span class="comment">// 设置填充规则</span></span><br><span class="line">shape.fillRule = kCAFillRuleEvenOdd</span><br><span class="line">shape.fillColor = <span class="type">UIColor</span>.lightGray.cgColor</span><br><span class="line"></span><br><span class="line"><span class="keyword">self</span>.view.layer.addSublayer(shape)</span><br></pre></td></tr></table></figure>
+<p>到此，扫描二维码的界面就算是构建完了。</p>
+<h3 id="摄像头扫描二维码"><a href="#摄像头扫描二维码" class="headerlink" title="摄像头扫描二维码"></a>摄像头扫描二维码</h3><p>要使用摄像头扫描二维码，首先需要获取相机的授权。如果没有得到授权，应该提示用户在权限设置中打开相机的权限。</p>
+<h4 id="检查相机授权"><a href="#检查相机授权" class="headerlink" title="检查相机授权"></a>检查相机授权</h4><p>首先需要检查当前相机的授权状态，授权状态是一个枚举类型，根据不同的枚举值判断下一步应该要做的是什么。</p>
+<ul>
+<li><p>notDetermined，表示还没有发起过授权请求；</p>
+</li>
+<li><p>authorized，表示已经取得了授权；</p>
+</li>
+<li><p>denied，表示已经拒绝了授权；</p>
+</li>
+<li><p>restricted，表示主动限制。</p>
+</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">checkCameraAuthorization</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">let</span> status = <span class="type">AVCaptureDevice</span>.authorizationStatus(<span class="keyword">for</span>: .video)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">switch</span> status &#123;</span><br><span class="line">        <span class="keyword">case</span> .notDetermined:</span><br><span class="line">            <span class="type">AVCaptureDevice</span>.requestAccess(<span class="keyword">for</span>: .video, completionHandler: &#123; (granted) <span class="keyword">in</span></span><br><span class="line">                <span class="keyword">if</span> granted &#123;</span><br><span class="line">                    <span class="comment">// 如果拿到了相机授权，可以进行下一步</span></span><br><span class="line">                    <span class="keyword">self</span>.setupCamera()</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> .authorized:</span><br><span class="line">            <span class="keyword">self</span>.setupCamera()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> .denied:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"前往系统设置打开app相机权限"</span>)</span><br><span class="line">            <span class="comment">// 此处需要在URL Types中添加一个prefs的URL Schemes</span></span><br><span class="line">            <span class="type">UIApplication</span>.shared.openURL(<span class="type">URL</span>.<span class="keyword">init</span>(string: <span class="string">"hello"</span>)!)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">case</span> .restricted:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">"Camera cannot be used."</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="相机设置"><a href="#相机设置" class="headerlink" title="相机设置"></a>相机设置</h4><p>相机设置包括device、session、input和output的设置，其中最主要的是<code>rectOfInterest</code>的设置。<code>rectOfInterest</code>是一个<code>CGRect</code>类型的属性，但是它的坐标原点是在右上角，取值范围是0~1。也就是说右上角坐标为（0，0），左下角坐标是（1，1）。为了方便设置，此处谢了一个坐标转换的函数。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// 将常规rect转换为相机的识别rect</span></span><br><span class="line"><span class="comment">///</span></span><br><span class="line"><span class="comment">/// - Parameters:</span></span><br><span class="line"><span class="comment">///   - rect: 待转换的常规rect</span></span><br><span class="line"><span class="comment">///   - parentSize: 所在的父视图的size</span></span><br><span class="line"><span class="comment">/// - Returns: 转换后的rect</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">transaction</span><span class="params">(rect: CGRect, parentSize: CGSize)</span></span> -&gt; <span class="type">CGRect</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> x = (parentSize.width - rect.origin.x) / parentSize.width</span><br><span class="line">    <span class="keyword">let</span> y = rect.origin.y / parentSize.height</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> width = rect.size.width / parentSize.width</span><br><span class="line">    <span class="keyword">let</span> height = rect.size.height / parentSize.height</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="type">CGRect</span>(x: x, y: y, width: width, height: height)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下来，检查back camera是否存在，设置session，input和output，最后设置显示相机捕获内容的<code>AVCaptureVideoPreviewLayer</code>并将其添加到父视图上去。最后调用<code>session</code>的<code>startRunning</code>方法开始捕捉。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">setupCamera</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">let</span> devices = <span class="type">AVCaptureDevice</span>.devices(<span class="keyword">for</span>: .video)</span><br><span class="line">    <span class="keyword">for</span> obj <span class="keyword">in</span> devices &#123;</span><br><span class="line">        <span class="keyword">if</span> obj.position == .back &#123;</span><br><span class="line">            <span class="keyword">self</span>.device = obj</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">self</span>.device == <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Unavailabel back camera."</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> input = <span class="keyword">try</span>! <span class="type">AVCaptureDeviceInput</span>.<span class="keyword">init</span>(device: <span class="keyword">self</span>.device!)</span><br><span class="line">    <span class="keyword">let</span> output = <span class="type">AVCaptureMetadataOutput</span>()</span><br><span class="line"></span><br><span class="line">    output.setMetadataObjectsDelegate(<span class="keyword">self</span>, queue: <span class="type">DispatchQueue</span>.main)</span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 在此处获取UI上画的白框rect，然后通过上面所写的函数进行坐标转换</span></span><br><span class="line">    <span class="keyword">let</span> x = (<span class="keyword">self</span>.view.bounds.size.width - <span class="number">200</span>) / <span class="number">2</span></span><br><span class="line">    <span class="keyword">let</span> rect = <span class="type">CGRect</span>(x: x, y: <span class="number">150</span>, width: <span class="number">200</span>, height: <span class="number">200</span>))</span><br><span class="line">    output.rectOfInterest = <span class="keyword">self</span>.transaction(rect: rect, parentSize: <span class="keyword">self</span>.view.bounds.size)</span><br><span class="line">  </span><br><span class="line">    <span class="comment">// 设置识别对象为二维码</span></span><br><span class="line">    output.metadataObjectTypes = [.qr]</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span>.session = <span class="type">AVCaptureSession</span>()</span><br><span class="line">    <span class="keyword">self</span>.session?.sessionPreset = .high</span><br><span class="line">    <span class="keyword">self</span>.session?.addInput(input)</span><br><span class="line">    <span class="keyword">self</span>.session?.addOutput(output)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> previewLayer = <span class="type">AVCaptureVideoPreviewLayer</span>.<span class="keyword">init</span>(session: <span class="keyword">self</span>.session!)</span><br><span class="line">    <span class="keyword">self</span>.view.layer.insertSublayer(previewLayer, at: <span class="number">0</span>)</span><br><span class="line">    <span class="keyword">self</span>.session?.startRunning()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="输出代理"><a href="#输出代理" class="headerlink" title="输出代理"></a>输出代理</h4><p>如果扫描到二维码，那么将会调用扫描成功的代理方法，通过获取扫描到的<code>metadataObjects</code>数组来获得最终的扫描文字内容。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">metadataOutput</span><span class="params">(<span class="number">_</span> output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection)</span></span> &#123;</span><br><span class="line">    <span class="keyword">let</span> object: <span class="type">AVMetadataMachineReadableCodeObject</span> = metadataObjects.first <span class="keyword">as</span>! <span class="type">AVMetadataMachineReadableCodeObject</span></span><br><span class="line">    <span class="built_in">print</span>(object.stringValue <span class="keyword">as</span> <span class="type">Any</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="图片识别二维码"><a href="#图片识别二维码" class="headerlink" title="图片识别二维码"></a>图片识别二维码</h3><p>图片识别相当简单，识别二维码主要会用到<code>CoreImage</code>中的<code>CIDectector</code>类。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">scanQRCode</span><span class="params">(image: UIImage)</span></span> &#123;</span><br><span class="line">    <span class="keyword">let</span> detector = <span class="type">CIDetector</span>.<span class="keyword">init</span>(ofType: <span class="type">CIDetectorTypeQRCode</span>, context: <span class="literal">nil</span>, options: [<span class="type">CIDetectorAccuracy</span>: <span class="type">CIDetectorAccuracyHigh</span>])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">let</span> result = detector?.features(<span class="keyword">in</span>: image.ciImage!)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">guard</span> result <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Cannot detect QRCode on the image."</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> feature <span class="keyword">in</span> result &#123;</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">"Message is \(feature.messageString)."</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="使用闪光灯"><a href="#使用闪光灯" class="headerlink" title="使用闪光灯"></a>使用闪光灯</h3><p>在黑暗环境下，使用相机扫描二维码时，会需要有光源照明，比如夜晚扫摩拜、ofo之类的场景。此时就会需要打开闪光灯。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">flashLight</span><span class="params">(sender: UIButton)</span></span> &#123;</span><br><span class="line">    sender.isSelected = !sender.isSelected</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span>.session?.beginConfiguration()</span><br><span class="line">    <span class="keyword">self</span>.device?.lockForConfiguration()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span>.device?.torchMode = sender.isSelected ? .on : .off</span><br><span class="line">    <span class="keyword">self</span>.device?.flashMode = sender.isSelected ? .on : .off</span><br><span class="line"></span><br><span class="line">    <span class="keyword">self</span>.device?.unlockForConfiguration()</span><br><span class="line">    <span class="keyword">self</span>.session?.commitConfiguration()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>后续会补充根据光线强度自动打开闪光灯的部分。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+         
+          <li><a href="/projects/">Projects</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </div>
+
+    <div id="toc-footer" style="display: none">
+      <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#概览"><span class="toc-number">1.</span> <span class="toc-text">概览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UI绘制"><span class="toc-number">2.</span> <span class="toc-text">UI绘制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#摄像头扫描二维码"><span class="toc-number">3.</span> <span class="toc-text">摄像头扫描二维码</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#检查相机授权"><span class="toc-number">3.1.</span> <span class="toc-text">检查相机授权</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#相机设置"><span class="toc-number">3.2.</span> <span class="toc-text">相机设置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#输出代理"><span class="toc-number">3.3.</span> <span class="toc-text">输出代理</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#图片识别二维码"><span class="toc-number">4.</span> <span class="toc-text">图片识别二维码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#使用闪光灯"><span class="toc-number">5.</span> <span class="toc-text">使用闪光灯</span></a></li></ol>
+    </div>
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2017/09/16/iOS二维码的识别/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&text=iOS中二维码的识别"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&title=iOS中二维码的识别"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&is_video=false&description=iOS中二维码的识别"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=iOS中二维码的识别&body=Check out this article: http://yoursite.com/2017/09/16/iOS二维码的识别/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&title=iOS中二维码的识别"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&title=iOS中二维码的识别"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&title=iOS中二维码的识别"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&title=iOS中二维码的识别"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2017/09/16/iOS二维码的识别/&name=iOS中二维码的识别&description=&lt;h3 id=&quot;概览&quot;&gt;&lt;a href=&quot;#概览&quot; class=&quot;headerlink&quot; title=&quot;概览&quot;&gt;&lt;/a&gt;概览&lt;/h3&gt;&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;二维条码&lt;/strong&gt;是指在一维条码的基础上扩展出另一维具有可读性的条码，使用黑白矩形图案表示二进制数据，被设备扫描后可获取其中所包含的信息。一维条码的宽度记载着数据，而其长度没有记载数据。二维条码的长度、宽度均记载着数据。&lt;/p&gt;
+&lt;p&gt;二维条码在商业活动中应用广泛，特别是在高科技行业、储存运输业、批发零售业等需要对物品进行廉价快捷的标示信息的行业用途广泛。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;闲话少叙，二维码的应用已经到了无孔不入的地步，只要是个规模稍大点儿的APP就基本支持二维码的识别，所以，本文就讲讲二维码的识别。&lt;/p&gt;"><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2017/09/16/iOS二维码的识别/&t=iOS中二维码的识别"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fas fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fas fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fas fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2014-2020
+    Alexius
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+          <li><a href="/">Home</a></li>
+         
+          <li><a href="/archives/">Writing</a></li>
+         
+          <li><a href="/categories/">Category</a></li>
+         
+          <li><a href="/projects/">Projects</a></li>
+         
+          <li><a href="/about/">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+<link rel="stylesheet" href="/lib/justified-gallery/css/justifiedGallery.min.css">
+
+    <!-- jquery -->
+<script src="/lib/jquery/jquery.min.js"></script>
+<script src="/lib/justified-gallery/js/jquery.justifiedGallery.min.js"></script>
+<!-- clipboard -->
+
+  <script src="/lib/clipboard/clipboard.min.js"></script>
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="far fa-clone"></i>';
+    btn += '</span>'; 
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+<script src="/js/main.js"></script>
+<!-- search -->
+
+<!-- Google Analytics -->
+
+<!-- Baidu Analytics -->
+
+<!-- Disqus Comments -->
+
+
+</body>
+</html>
