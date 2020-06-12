@@ -69,6 +69,6 @@ theme: cactus
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repo: https://github.com/Zeacone/zeacone.github.io.git
+  repo: https://github.com/Zeacone/alexius.github.io.git
   branch: master
   message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }})"
