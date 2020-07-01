@@ -10,11 +10,11 @@
 <meta name="keywords" content="Swift">
 <meta property="og:type" content="article">
 <meta property="og:title" content="在Swift中实现深拷贝">
-<meta property="og:url" content="http://yoursite.com/2020/07/01/在Swift中实现深拷贝/index.html">
+<meta property="og:url" content="http://yoursite.com/2017/05/24/在Swift中实现深拷贝/index.html">
 <meta property="og:site_name" content="Alexius&#39;s Utopia">
 <meta property="og:description" content="关于数组拷贝的例子首先，先看一个例子。 12345678910111213141516171819202122232425262728struct Teacher &amp;#123;    var name: String    var age: Int&amp;#125;class Student &amp;#123;    var name: String    var age: Int    init(name:">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-07-01T04:57:42.159Z">
+<meta property="og:updated_time" content="2020-07-01T05:09:10.933Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="在Swift中实现深拷贝">
 <meta name="twitter:description" content="关于数组拷贝的例子首先，先看一个例子。 12345678910111213141516171819202122232425262728struct Teacher &amp;#123;    var name: String    var age: Int&amp;#125;class Student &amp;#123;    var name: String    var age: Int    init(name:">
@@ -74,8 +74,8 @@
     <span id="actions">
       <ul>
         
+        <li><a class="icon" href="/2017/08/24/iOS中绘制SVG（一）：SVG文件的解析/"><i class="fas fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
-        <li><a class="icon" href="/2020/06/13/在Swift中实现MVVM/"><i class="fas fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fas fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" href="#"><i class="fas fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -88,17 +88,17 @@
     <br>
     <div id="share" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&text=在Swift中实现深拷贝"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&is_video=false&description=在Swift中实现深拷贝"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=在Swift中实现深拷贝&body=Check out this article: http://yoursite.com/2020/07/01/在Swift中实现深拷贝/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&name=在Swift中实现深拷贝&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&t=在Swift中实现深拷贝"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&text=在Swift中实现深拷贝"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&is_video=false&description=在Swift中实现深拷贝"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=在Swift中实现深拷贝&body=Check out this article: http://yoursite.com/2017/05/24/在Swift中实现深拷贝/"><i class="fas fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&name=在Swift中实现深拷贝&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&t=在Swift中实现深拷贝"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
@@ -127,7 +127,7 @@
       
     <div class="postdate">
       
-        <time datetime="2020-07-01T03:02:44.000Z" itemprop="datePublished">2020-07-01</time>
+        <time datetime="2017-05-24T03:02:44.000Z" itemprop="datePublished">2017-05-24</time>
         
       
     </div>
@@ -160,11 +160,14 @@
 <p>但是，如果数组中的元素是类的实例的话，在这种情况下，数组中存储的只是存在于数组外部的对象的引用。如果在一个数组中更改对对象的引用，则只有该数组具有对新对象的引用。 但是，如果两个数组包含对同一对象的引用，则可以从两个数组中观察到对该对象属性的更改。</p>
 <p>回到我们的例子，因为 <code>Teacher</code>是一个结构体，属于简单数据类型，当存放它的数组被 copy 的时候，同时复制了数组中所有元素的值。所以，更改<code>teachersCopy</code>中的元素的时候原数组不受影响。</p>
 <p>而<code>Student</code>是一个<code>class</code>，当存放<code>Student</code>的数组被复制的时候，复制的其实是对象的引用，因此对<code>studentsCopy</code>中的元素更改值的时候，两个数组中的元素都被更改。</p>
-<h3 id="数组的深拷贝"><a href="#数组的深拷贝" class="headerlink" title="数组的深拷贝"></a>数组的深拷贝</h3><p>那么如何实现包含类实例的深拷贝呢？众所周知，在<code>Objective-C</code>中自定义类要实现copy需要遵循NSCopying协议。在Swift中也是一样的做法。</p>
-<p>首先，定义一个Coping协议：<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Copying</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">(original: <span class="keyword">Self</span>)</span></span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Copying</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">copy</span><span class="params">()</span></span> -&gt; <span class="type">Self</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="type">Self</span>.<span class="keyword">init</span>(original: <span class="keyword">self</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>然后，让我们的自定义类遵循这个协议，并实现相应的方法。同时，在copy数组的时候也要改变方式。<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span>: <span class="title">Copying</span> </span>&#123;</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">init</span>(original: <span class="type">Student</span>) &#123;</span><br><span class="line">        name = original.name</span><br><span class="line">        age = original.age</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> studentsCopy = [<span class="type">Student</span>]()</span><br><span class="line"><span class="keyword">for</span> student <span class="keyword">in</span> students &#123;</span><br><span class="line">    <span class="keyword">let</span> copiedStudent = student.copy()</span><br><span class="line">    studentsCopy.append(copiedStudent)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这样，再修改studentsCopy中的内容，students就不会再随之改变了，数组的深拷贝也就实现了。</p>
-<p>当然，还有更精简一些的写法。<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> <span class="title">where</span> <span class="title">Element</span>: <span class="title">Copying</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">copy</span><span class="params">()</span></span> -&gt; <span class="type">Array</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> copiedArray = <span class="type">Array</span>&lt;<span class="type">Element</span>&gt;()</span><br><span class="line">        <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">            copiedArray.append(element.copy)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> copiedArray</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> studentsCopy = students.copy()</span><br></pre></td></tr></table></figure></p>
+<h3 id="数组的深拷贝"><a href="#数组的深拷贝" class="headerlink" title="数组的深拷贝"></a>数组的深拷贝</h3><p>那么如何实现包含类实例的深拷贝呢？众所周知，在<code>Objective-C</code>中自定义类要实现copy需要遵循<code>NSCopying</code>协议。在 Swift 中也是一样的做法。</p>
+<p>首先，定义一个<code>Coping</code>协议。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">protocol</span> <span class="title">Copying</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">(original: <span class="keyword">Self</span>)</span></span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Copying</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">copy</span><span class="params">()</span></span> -&gt; <span class="type">Self</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="type">Self</span>.<span class="keyword">init</span>(original: <span class="keyword">self</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后，让我们的自定义类遵循这个协议，并实现相应的方法。同时，在 copy 数组的时候也要改变方式。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Student</span>: <span class="title">Copying</span> </span>&#123;</span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">init</span>(original: <span class="type">Student</span>) &#123;</span><br><span class="line">        name = original.name</span><br><span class="line">        age = original.age</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> studentsCopy = [<span class="type">Student</span>]()</span><br><span class="line"><span class="keyword">for</span> student <span class="keyword">in</span> students &#123;</span><br><span class="line">    <span class="keyword">let</span> copiedStudent = student.copy()</span><br><span class="line">    studentsCopy.append(copiedStudent)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样，再修改<code>studentsCopy</code>中的内容，<code>students</code>就不会再随之改变了，数组的深拷贝也就实现了。</p>
+<p>当然，还有更精简一些的写法。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">Array</span> <span class="title">where</span> <span class="title">Element</span>: <span class="title">Copying</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">copy</span><span class="params">()</span></span> -&gt; <span class="type">Array</span> &#123;</span><br><span class="line">        <span class="keyword">var</span> copiedArray = <span class="type">Array</span>&lt;<span class="type">Element</span>&gt;()</span><br><span class="line">        <span class="keyword">for</span> element <span class="keyword">in</span> <span class="keyword">self</span> &#123;</span><br><span class="line">            copiedArray.append(element.copy)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> copiedArray</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> studentsCopy = students.copy()</span><br></pre></td></tr></table></figure>
 <p>That’s done.</p>
 
   </div>
@@ -198,17 +201,17 @@
 
     <div id="share-footer" style="display: none">
       <ul>
-  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&text=在Swift中实现深拷贝"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&is_video=false&description=在Swift中实现深拷贝"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="mailto:?subject=在Swift中实现深拷贝&body=Check out this article: http://yoursite.com/2020/07/01/在Swift中实现深拷贝/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&name=在Swift中实现深拷贝&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
-  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2020/07/01/在Swift中实现深拷贝/&t=在Swift中实现深拷贝"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.facebook.com/sharer.php?u=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://twitter.com/share?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&text=在Swift中实现深拷贝"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.linkedin.com/shareArticle?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://pinterest.com/pin/create/bookmarklet/?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&is_video=false&description=在Swift中实现深拷贝"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=在Swift中实现深拷贝&body=Check out this article: http://yoursite.com/2017/05/24/在Swift中实现深拷贝/"><i class="fas fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://getpocket.com/save?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://reddit.com/submit?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.stumbleupon.com/submit?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://digg.com/submit?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&title=在Swift中实现深拷贝"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="http://www.tumblr.com/share/link?url=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&name=在Swift中实现深拷贝&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="https://news.ycombinator.com/submitlink?u=http://yoursite.com/2017/05/24/在Swift中实现深拷贝/&t=在Swift中实现深拷贝"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
 </ul>
 
     </div>
