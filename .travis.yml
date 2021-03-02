@@ -14,7 +14,12 @@ install:
 
 script:
     - hexo clean # 清除
-    - hexo deploy
+    - hexo generate
+    # - hexo deploy
+
+after_success:
+    sed -i'' "s~git@github.com:~https://s~git@github.com:~https://${blog_token}@github.com/~"
+    - hexo deploy > /dev/null
 
 branches:
     only:
