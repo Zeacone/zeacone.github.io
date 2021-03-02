@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>SwiftUI中的Property Wrapper #01 | Alexius&#39;s Utopia</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="在学习 SwiftUI 的过程中，出现了许多在 Swift 中未曾遇到过的类似 @xxx 的东西，在 SwiftUI 中被称作 Property Wrapper。今天就来学习一下 Property Wrapper 应该怎么使用以及应该什么时候使用。 SwiftUI 中常见的 Property Wrapper 有 @State，@Binding，@ObservedObject，@Environmen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="SwiftUI中的Property Wrapper #01">
+<meta property="og:url" content="http://yoursite.com/2020/02/12/SwiftUI中的Property-Wrapper-01/index.html">
+<meta property="og:site_name" content="Alexius&#39;s Utopia">
+<meta property="og:description" content="在学习 SwiftUI 的过程中，出现了许多在 Swift 中未曾遇到过的类似 @xxx 的东西，在 SwiftUI 中被称作 Property Wrapper。今天就来学习一下 Property Wrapper 应该怎么使用以及应该什么时候使用。 SwiftUI 中常见的 Property Wrapper 有 @State，@Binding，@ObservedObject，@Environmen">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2021-03-02T13:04:03.991Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SwiftUI中的Property Wrapper #01">
+<meta name="twitter:description" content="在学习 SwiftUI 的过程中，出现了许多在 Swift 中未曾遇到过的类似 @xxx 的东西，在 SwiftUI 中被称作 Property Wrapper。今天就来学习一下 Property Wrapper 应该怎么使用以及应该什么时候使用。 SwiftUI 中常见的 Property Wrapper 有 @State，@Binding，@ObservedObject，@Environmen">
+  
+    <link rel="alternate" href="/atom.xml" title="Alexius&#39;s Utopia" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Alexius&#39;s Utopia</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">Amusing ourselves to death.</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-SwiftUI中的Property-Wrapper-01" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2020/02/12/SwiftUI中的Property-Wrapper-01/" class="article-date">
+  <time datetime="2020-02-12T02:34:36.000Z" itemprop="datePublished">2020-02-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      SwiftUI中的Property Wrapper #01
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>在学习 <code>SwiftUI</code> 的过程中，出现了许多在 <code>Swift</code> 中未曾遇到过的类似 <code>@xxx</code> 的东西，在 <code>SwiftUI</code> 中被称作 <code>Property Wrapper</code>。今天就来学习一下 <code>Property Wrapper</code> 应该怎么使用以及应该什么时候使用。</p>
+<p><code>SwiftUI</code> 中常见的 <code>Property Wrapper</code> 有 <code>@State</code>，<code>@Binding</code>，<code>@ObservedObject</code>，<code>@EnvironmentObject</code> 以及 <code>@Environment</code>等等。接下来就开始分别学习。</p>
+<h3 id="State"><a href="#State" class="headerlink" title="@State"></a>@State</h3><p><code>@State</code> 用来描述视图的状态，它所修饰的变量被存储在视图结构之外一个特殊的内部内存空间，只有相关联的视图能够访问。一旦 <code>@State</code> 所修饰的变量发生改变，<code>SwiftUI</code> 将根据所发生的改变重建试图。下面是一个例子：<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ProductsView</span>: <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> products: [<span class="type">Product</span>]</span><br><span class="line">    </span><br><span class="line">    @<span class="type">State</span> <span class="keyword">private</span> <span class="keyword">var</span> showFavorited: <span class="type">Bool</span> = <span class="literal">false</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">        <span class="type">List</span> &#123;</span><br><span class="line">            <span class="type">Button</span>(</span><br><span class="line">                action: &#123; <span class="keyword">self</span>.showFavorited.toggle() &#125;,</span><br><span class="line">                label: &#123; <span class="type">Text</span>(<span class="string">"Change filter"</span>)&#125;</span><br><span class="line">            )</span><br><span class="line">            </span><br><span class="line">            <span class="type">ForEach</span>(products) &#123; product <span class="keyword">in</span></span><br><span class="line">                <span class="keyword">if</span> !<span class="keyword">self</span>.showFavorited || product.isFavorited &#123;</span><br><span class="line">                    <span class="type">Text</span>(product.title)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在上面的例子中，一旦按下按钮，<code>@State</code> 所修饰的<code>showFavorited</code> 的值就发生改变，整个视图也将被重新创建。</p>
+<h3 id="Binding"><a href="#Binding" class="headerlink" title="@Binding"></a>@Binding</h3><p><code>@Binding</code> 为值类型提供了引用访问的方式。有时我们需要使子视图能够访问父视图的状态，但是不能够简单地把值传递过去，因为状态是值类型，SwiftUI 只会传递这个值的一个拷贝。这时候 @Binding 就派上用场了：<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">FilterView</span>: <span class="title">View</span> </span>&#123;</span><br><span class="line">    @<span class="type">Binding</span> <span class="keyword">var</span> showFavorited: <span class="type">Bool</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">        <span class="type">Toggle</span>(isOn: $showFavorited) &#123;</span><br><span class="line">            <span class="type">Text</span>(<span class="string">"Change filter"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">ProductsView</span>: <span class="title">View</span> </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> products: [<span class="type">Product</span>]</span><br><span class="line">    </span><br><span class="line">    @<span class="type">State</span> <span class="keyword">private</span> <span class="keyword">var</span> showFavorited: <span class="type">Bool</span> = <span class="literal">false</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">        <span class="type">List</span> &#123;</span><br><span class="line">            <span class="type">FilterView</span>(showFavorited: $showFavorited)</span><br><span class="line">            </span><br><span class="line">            <span class="type">ForEach</span>(products) &#123; product <span class="keyword">in</span></span><br><span class="line">                <span class="keyword">if</span> !<span class="keyword">self</span>.showFavorited || product.isFavorited &#123;</span><br><span class="line">                    <span class="type">Text</span>(product.title)</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在上面的例子中，使用 @Binding 去标记 showFavorited ，这样的话，FilterView 对showFavorited的读写实际就是对ProductsView中的showFavorited进行读写。而根据上一节 @State 所讲到的内容，ProductsView 的 showFavorited 一改变，SwiftUI 就将重新创建此视图。</p>
+<blockquote>
+<p>@Binding只适合对值类型的变量进行修饰，如果对非值类型的变量进行修饰可能会引起未知的错误。</p>
+<p>另外，对 @Binding 修饰的变量传值的时候一定要加上 <code>$</code> 符号，代表是传递的引用，否则就是传递值的拷贝。</p>
+</blockquote>
+<h3 id="ObservedObject"><a href="#ObservedObject" class="headerlink" title="@ObservedObject"></a>@ObservedObject</h3><p>@ObservedObject 是 Combine 框架中的一部分，主要用于处理 SwiftUI 之外的一些事物——比如业务逻辑。可以在不同的独立的视图之间共享、观察和订阅 @ObservedObject 所修饰的变量。一旦变量发生改变，所有绑定此变量的视图都将重建。<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> Combine</span><br><span class="line"></span><br><span class="line"><span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">PodcastPlayer</span>: <span class="title">ObservableObject</span> </span>&#123;</span><br><span class="line">    @<span class="type">Published</span> <span class="keyword">private</span>(<span class="keyword">set</span>) <span class="keyword">var</span> isPlaying: <span class="type">Bool</span> = <span class="literal">false</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">play</span><span class="params">()</span></span> &#123;</span><br><span class="line">        isPlaying = <span class="literal">true</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">pause</span><span class="params">()</span></span> &#123;</span><br><span class="line">        isPlaying = <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><code>PodcastPlayer</code> 可以在多个视图之间共享，在 <code>@Published</code> 属性的帮助下，<code>SwiftUI</code> 可以追踪 <code>@ObservableObject</code> 的变化。一旦 <code>@Published</code> 发生变化，所有绑定 <code>@ObservableObject</code> 的视图都将被重建。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">EpisodesView</span>: <span class="title">View</span> </span>&#123;</span><br><span class="line">    @<span class="type">ObservedObject</span> <span class="keyword">var</span> player: <span class="type">PodcastPlayer</span></span><br><span class="line">    <span class="keyword">let</span> episodes: [<span class="type">Episode</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">        <span class="type">List</span> &#123;</span><br><span class="line">            <span class="type">Button</span>(</span><br><span class="line">                action: &#123;</span><br><span class="line">                    <span class="keyword">if</span> <span class="keyword">self</span>.player.isPlaying &#123;</span><br><span class="line">                        <span class="keyword">self</span>.player.pause()</span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                        <span class="keyword">self</span>.player.play()</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;,</span><br><span class="line">                label: &#123; <span class="type">Text</span>(player.isPlaying ? <span class="string">"Pause"</span>: <span class="string">"Play"</span>) &#125;</span><br><span class="line">            )</span><br><span class="line">            <span class="type">ForEach</span>(episodes) &#123; episode <span class="keyword">in</span></span><br><span class="line">                <span class="type">Text</span>(episode.title)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>因为可以在多个视图之间共享数据，因此 ObservableObject 必须是引用类型。</p>
+</blockquote>
+<h3 id="EnvironmentObject"><a href="#EnvironmentObject" class="headerlink" title="@EnvironmentObject"></a>@EnvironmentObject</h3><p>@EnvironmentObject 可以将变量隐式地注入到试图层级的环境中。举例说明：<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="keyword">let</span> player = <span class="type">PodcastPlayer</span>()</span><br><span class="line">window.rootViewController = <span class="type">UIHostingController</span>(</span><br><span class="line">    rootView: <span class="type">EpisodesView</span>(episode: episodes)</span><br><span class="line">        .environmentObject(player)</span><br><span class="line">)</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">EpisodeView</span>: <span class="title">View</span> </span>&#123;</span><br><span class="line">@<span class="type">EnvironmentObject</span> <span class="keyword">var</span> player: <span class="type">PodcastPlayer</span></span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如上可见，我们可以通过 <code>environmentObject</code> 修饰符来传递 <code>PodcastPlayer</code>，而且可以通过 <code>@EnvironmentObject</code> 轻松地访问。<code>@EnvironmentObject</code> 通过动态成员查找（dynamic member lookup）特性去找到 <code>Environment</code> 中的 <code>PodcastPlayer</code> 实例。这就是为什么不需要在 <code>EpisodesView</code> 初始化的时候传递 <code>PodcastPlayer</code> 实例的原因。</p>
+<h3 id="Environment"><a href="#Environment" class="headerlink" title="@Environment"></a>@Environment</h3><p>前一章节讨论的是将自定义对象传递到 <code>Environment</code> 中，但是 <code>SwiftUI</code> 已经存在许多系统级的设置，通过 <code>@Environment</code> 可以轻松地进行访问。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">CalendarView</span>: <span class="title">View</span> </span>&#123;</span><br><span class="line">    @<span class="type">Environment</span>(\.calendar) <span class="keyword">var</span> calendar: <span class="type">Calendar</span></span><br><span class="line">    @<span class="type">Environment</span>(|.locale) <span class="keyword">var</span> locale: <span class="type">Locale</span></span><br><span class="line">    @<span class="type">Environment</span>(\/colorScheme) <span class="keyword">var</span> colorScheme: <span class="type">ColorScheme</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">var</span> body: some <span class="type">View</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="type">Text</span>(locale.identifier)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过 <code>@Environment</code> 实现了访问和订阅系统级设置的变化。这些系统设置变化，<code>App</code> 中对应的视图也将被重建。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2020/02/12/SwiftUI中的Property-Wrapper-01/" data-id="ckls1u0qo0000f0xr31pyj98v" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2020/06/13/在Swift中实现MVVM/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          【翻译】在Swift中实现MVVM
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2017/09/16/iOS二维码的识别/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">iOS中二维码的识别</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/iOS/">iOS</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/MVVM/">MVVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Objective-C/">Objective-C</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SVG/">SVG</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Swift/">Swift</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/iOS/">iOS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/二维码/">二维码</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/MVVM/" style="font-size: 10px;">MVVM</a> <a href="/tags/Objective-C/" style="font-size: 10px;">Objective-C</a> <a href="/tags/SVG/" style="font-size: 15px;">SVG</a> <a href="/tags/Swift/" style="font-size: 15px;">Swift</a> <a href="/tags/iOS/" style="font-size: 20px;">iOS</a> <a href="/tags/二维码/" style="font-size: 10px;">二维码</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/06/">June 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/02/">February 2020</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/06/13/在Swift中实现MVVM/">【翻译】在Swift中实现MVVM</a>
+          </li>
+        
+          <li>
+            <a href="/2020/02/12/SwiftUI中的Property-Wrapper-01/">SwiftUI中的Property Wrapper #01</a>
+          </li>
+        
+          <li>
+            <a href="/2017/09/16/iOS二维码的识别/">iOS中二维码的识别</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/26/iOS中绘制SVG（二）：path命令的绘制/">iOS中绘制SVG（二）：path命令的绘制</a>
+          </li>
+        
+          <li>
+            <a href="/2017/08/24/iOS中绘制SVG（一）：SVG文件的解析/">iOS中绘制SVG（一）：SVG文件的解析</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2021 Alexius<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
