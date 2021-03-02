@@ -72,18 +72,18 @@ script:
     - hexo clean # 清除
     - hexo g -d # 生成
 
-after_script:
-    - git clone https://${GH_REF} .deploy_git
-    - cd .deploy_git
-    - git checkout master
-    - cd ../
-    - mv .deploy_git/.git/ ./public/
-    - cd ./public
-    - git config user.name "Alexiusy"
-    - git config user.email "andreboot42@gmail.com"
-    - git add .
-    - git commit -m "Travis CI Auto Builder"
-    - git push --force --quiet "https://${blog_token}@${GH_REF}" master:master
+# after_script:
+#     - git clone https://${GH_REF} .deploy_git
+#     - cd .deploy_git
+#     - git checkout master
+#     - cd ../
+#     - mv .deploy_git/.git/ ./public/
+#     - cd ./public
+#     - git config user.name "Alexiusy"
+#     - git config user.email "andreboot42@gmail.com"
+#     - git add .
+#     - git commit -m "Travis CI Auto Builder"
+#     - git push --force --quiet "https://${blog_token}@${GH_REF}" master:master
 
 branches:
     only:
