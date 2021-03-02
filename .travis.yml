@@ -69,17 +69,9 @@ install:
 
 script:
     - hexo clean # 清除
-    - hexo g     # 生成
-
-deploy:
-    provider: pages
-    skip_cleanup: false
-    token: $blog_token
-    keep_history: false
-    on:
-        branch: hexo
-    local_dir: public
-    target_branch: master
+    - hexo generate     # 生成
+    - echo ${ENV_TEST}
+    - hexo deploy
 
 # after_script:
 #     - git clone https://${GH_REF} .deploy_git
