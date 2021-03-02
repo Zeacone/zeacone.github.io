@@ -1,51 +1,94 @@
- language: node_js
+# language: node_js
+#
+# node_js: stable
+#
+# branches:
+#   only:
+#   - hexo      # 监视github仓库中的hexo分支，分支出现变化就执行build
+#
+# before_install:
+# - export TZ='Asia/Shanghai'
+# - npm install -g hexo
+# - npm install --force -g hexo-cli
+## 上面两行应该可以被下面两行取代，暂时先不动，看看效果再说
+## - npm install -g hexo-cli
+## - npm install --force
+#
+# install:
+# - npm install
+#
+# script:
+# # # - git submodule init      # 用于更新主题,更新源为自己的主题项目，否则会clone最新NexT主题，而官方主题配置文件没有设置
+# # # - git submodule update
+# - hexo clean
+# - hexo generate
+#
+#
+# # after_success:
+# # - git config --global user.name "Zeacone"
+# # - git config --global user.email "andreboot42@gmail.com"
+# # - hexo deploy
+#
+#
+# after_script:
+#   - cd ./public
+#   - git init
+#   - git config user.name "Alexiusy"
+#   - git config user.email "andreboot42@gmail.com"
+#   - git add .
+#   - git commit -m "Update docs"
+#   - git push --force --quiet "https://${blog_token}@${GH_REF}" master:master
+#
+# # E: Build LifeCycle
+#
+# branches:
+#   only:
+#     - hexo
+#
+# # 设置环境变量
+# env:
+#  global:
+#    - GH_REF: github.com/Alexiusy/alexiusy.github.io.git
 
- node_js: stable
-
- branches:
-   only:
-   - hexo      # 监视github仓库中的hexo分支，分支出现变化就执行build
-
- before_install:
- - export TZ='Asia/Shanghai'
- - npm install -g hexo
- - npm install --force -g hexo-cli
-# 上面两行应该可以被下面两行取代，暂时先不动，看看效果再说
-# - npm install -g hexo-cli
-# - npm install --force
-
- install:
- - npm install
-
- script:
- # # - git submodule init      # 用于更新主题,更新源为自己的主题项目，否则会clone最新NexT主题，而官方主题配置文件没有设置
- # # - git submodule update
- - hexo clean
- - hexo generate
 
 
- # after_success:
- # - git config --global user.name "Zeacone"
- # - git config --global user.email "andreboot42@gmail.com"
- # - hexo deploy
 
+language: node_js # 设置语言
 
- after_script:
-   - cd ./public
-   - git init
-   - git config user.name "Alexiusy"
-   - git config user.email "andreboot42@gmail.com"
-   - git add .
-   - git commit -m "Update docs"
-   - git push --force --quiet "https://${blog_token}@${GH_REF}" master:master
+node_js: stable # 设置相应版本
 
- # E: Build LifeCycle
+cache:
+    apt: true
+    directories:
+        - node_modules # 缓存不经常更改的内容
 
- branches:
-   only:
-     - hexo
-     
- # 设置环境变量
- env:
-  global:
-    - GH_REF: github.com/Alexiusy/alexiusy.github.io.git
+before_install:
+    - npm install hexo-cli -g
+
+install:
+    - npm install # 安装hexo及插件
+
+script:
+    - hexo clean # 清除
+    - hexo g # 生成
+
+after_script:
+    - git clone https://${GH_REF} .deploy_git
+    - cd .deploy_git
+    - git checkout master
+    - cd ../
+    - mv .deploy_git/.git/ ./public/
+    - cd ./public
+    - git config user.name "Alexiusy"
+    - git config user.email "andreboot42@gmail.com"
+    - git add .
+    - git commit -m "Travis CI Auto Builder"
+    - git push --force --quiet "https://${blog_token}@${GH_REF}" master:master
+
+branches:
+    only:
+        - hexo # 只监测hexo分支
+
+env:
+    global:
+        - GH_REF: github.com/Alexiusy/alexiusy.github.io.git #设置GH_REF，注意更改成自己的仓库地址
