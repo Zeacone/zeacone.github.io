@@ -72,3 +72,4 @@ deploy:
   repo: https://github.com/Alexiusy/alexiusy.github.io.git
   branch: master
   message: "Site updated: {{ now('YYYY-MM-DD HH:mm:ss') }})"
+  token: $blog_token
