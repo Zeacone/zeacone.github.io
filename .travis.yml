@@ -14,8 +14,6 @@ install:
 
 script:
     - hexo clean # 清除
-    # - hexo generate     # 生成
-    # - echo ${ENV_TEST}
     - hexo deploy
 
 branches:
