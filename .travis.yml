@@ -46,5 +46,5 @@
      - hexo
  env:
   global:
-    - GH_REF: github.com/Alexiusy/agstlexiusy.github.io.git
+    - GH_REF: github.com/Alexiusy/alexiusy.github.io.git
     #设置 GH_REF，注意更改 yourname
